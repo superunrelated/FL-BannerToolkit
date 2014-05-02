@@ -19,7 +19,7 @@ Creates duplicates of your current open document in the sizes you provide. Speci
 - Allow smoothing will traverse the entire llibrary and ensure that "Allow Smothing" is on or off for all bitmap assets.
 - Resize instaces to stage will traverse all layers and frames on the main timeline and resize instances with the names you proveide. Usefull for buttons and backgrounds.
 - Aligns instances to stage. Usefull for logos that always belong in a corner.
-- 
+
 ![](https://github.com/superunrelated/BannerToolkit/blob/master/docs/images/CreateVersions2.png?raw=true)
 
 Publish Fallbacks
