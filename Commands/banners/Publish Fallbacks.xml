@@ -1,0 +1,54 @@
+﻿<dialog title="Set publish settings" buttons="accept, cancel" >
+	<grid>
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Fallback frame/framelabel:" />
+				<textbox id="fallbackFrame" value="fallback" multiline="false"/>
+			</row>
+			<row>
+				<checkbox id="flashQualityCheckbox" label="Change Flash Quality: (%)" checked="true" />
+				<textbox id="flashQuality" value="80" multiline="false" maxlength="3" />
+			</row>
+			<row>
+				<checkbox id="jpgQualityCheckbox" label="Change JPG Quality: (%)" checked="true" />
+				<textbox id="jpgQuality" value="80" multiline="false" maxlength="3" />
+			</row>
+			<row>
+				<label value="Fallbacks:" />
+			</row>
+			<row>
+				<checkbox id="jpgCheckbox" label="JPEG" checked="true" />
+				<checkbox id="gifCheckbox" label="GIF" checked="false" />
+			</row>
+			<row>
+				<label value="Settings:" />
+			</row>
+			<row>
+				<checkbox id="sizeReportCheckbox" label="Publish Size Report" checked="false" />
+				<checkbox id="smoothingCheckbox" label="Allow Smoothing" checked="true" />
+			</row>
+			<row>
+				<checkbox id="publishToFileSizeCheckbox" label="Publish To File Size:" checked="true" />
+				<label value="(Overrides the quality setting above)" />
+			</row>
+			<row>
+				<label value="Start quality: (%)" />
+				<textbox id="publishToFileSizeStartQuality" value="90" multiline="false"/>
+			</row>
+			<row>
+				<label value="In intervals of: (% quality)" />
+				<textbox id="publishToFileSizeInterval" value="5" multiline="false"/>
+			</row>
+		</rows>
+	</grid>
+	<separator/>
+</dialog>
+
+
+	
+	
+	

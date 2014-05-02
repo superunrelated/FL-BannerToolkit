@@ -1,0 +1,4 @@
+﻿<dialog title="Select sizes to create:" buttons="accept,cancel">
+	<label value="Versions: (Matches all instances of NNNxNNNN)" />
+	<textbox id="versions" value="" multiline="true" width="500" height="500"/>
+</dialog>
