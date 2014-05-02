@@ -36,6 +36,6 @@ Iterative sizing targets:
 - Publish to filesize sets a start quality for the file.
 - Interval is the quality downgrade for each iteration.
 - For each size you can set a target file size in kb. If the target cannot be reached a warning will be displayed in the Output Panel.
-- 
+
 ![](https://github.com/superunrelated/BannerToolkit/blob/master/docs/images/PublishFallbacks.png?raw=true)
 
