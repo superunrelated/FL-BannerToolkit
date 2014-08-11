@@ -3,7 +3,7 @@
 Utils.prototype.setSmoothing = function(library, smoothing) {
 	for (var i = 0; i < library.items.length; i++){
 		var libItem = document.library.items[i];
-		if (libItem.itemType == "bitmap"){
+		if (libItem && libItem.itemType == "bitmap"){
 			libItem.allowSmoothing = smoothing;
 		}
 	}
