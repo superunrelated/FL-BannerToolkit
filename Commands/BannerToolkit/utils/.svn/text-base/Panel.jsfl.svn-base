@@ -22,7 +22,7 @@ Panel.prototype.show = function (panelURI, values, fields){
             }
         }
     }
-
+    
     var panelOutput = this.showXMLPanel(panel);
     if (panelOutput.dismiss == "accept"){
         FLfile.write(prefsURI, JSON.stringify(panelOutput));
@@ -46,7 +46,7 @@ Panel.prototype.populateField = function(field, value){
 }
 
 Panel.prototype.showXMLPanel = function(xmlString){
-    var tempUrl = fl.configURI + "Commands/banners/CustomPanel.xml"
+    var tempUrl = fl.configURI + "/Commands/banners/CustomPanel.xml"
     FLfile.write(tempUrl, xmlString);
     var xmlPanelOutput = fl.getDocumentDOM().xmlPanel(tempUrl);
     FLfile.remove(tempUrl);

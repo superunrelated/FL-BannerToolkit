@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<dialog title="Replace Text" buttons="accept,cancel">
+	<grid>
+		<label id="title" value="Replace text in all open documents:" />
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<hbox>
+					<label id="replaceTitle" value="Replace:" />
+				</hbox>
+				<hbox>
+					<textbox id="replaceText" value="" multiline="false" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<label id="withTitle" value="With:" />
+				</hbox>
+				<hbox>
+					<textbox id="withText" value="" multiline="false" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<label id="" value="" />
+				</hbox>
+				<hbox>
+					<checkbox id="regexp" label="Use RegExp" checked="false" />
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</dialog>

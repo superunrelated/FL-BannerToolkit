@@ -1,0 +1,8 @@
+﻿<dialog title="Publish to File Size:" buttons="accept, cancel" >
+	<label value="Target file size: (kb)" />
+	<textbox id="targetSize" value="45" multiline="false"/>
+	<label value="Start quality: (%)" />
+	<textbox id="startQuality" value="90" multiline="false"/>
+	<label value="In intervals of: (% quality)" />
+	<textbox id="targetInterval" value="5" multiline="false"/>
+</dialog>

@@ -1,0 +1,109 @@
+﻿<dialog title="Select sizes to create:" buttons="accept,cancel">
+
+	<label value="Found versions:" />
+	<label id="versions" value="" multiline="true"/>
+	
+	<separator/>
+	<label value="Library:" />
+	<grid>
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<checkbox id="deleteUnused" label="Delete unused library items" checked="true" />
+			</row>
+			<row>
+				<checkbox id="smoothingCheckbox" label="Allow Smooting" checked="true" />
+			</row>
+		</rows>
+	</grid>
+	
+	<separator/>
+	
+	<label value="Resize instances to stage:" />
+	<grid>
+		<columns>
+			<column/>
+			<column/>
+			<column/>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<checkbox id="resizeCheckbox1" label="instance:" checked="true" />
+				<textbox id="resizeInstance1" value="button" multiline="false" maxlength="128" width="100" />
+				<label value="     " />
+				<checkbox id="resizeCheckbox2" label="instance:" checked="false" />
+				<textbox id="resizeInstance2" value="background" multiline="false" maxlength="128" width="100" />
+			</row>
+			<row>
+				<checkbox id="resizeCheckbox3" label="instance:" checked="false" />
+				<textbox id="resizeInstance3" value="" multiline="false" maxlength="128" width="100" />
+				<label value="     " />
+				<checkbox id="resizeCheckbox4" label="instance:" checked="false" />
+				<textbox id="resizeInstance4" value="" multiline="false" maxlength="128" width="100" />
+			</row>
+		</rows>
+	</grid>
+	
+	<separator/>
+	
+	<label value="Align instances to stage (uses the registration point):" />
+	<grid>
+		<columns>
+			<column/>
+			<column/>
+			<column/>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<checkbox id="alignCheckbox1" label="instance:" checked="false" />
+				<textbox id="alignInstance1" value="logo" multiline="false" maxlength="128" width="100" />
+				<label value="     " />
+				<checkbox id="alignCheckbox2" label="instance:" checked="false" />
+				<textbox id="alignInstance2" value="" multiline="false" maxlength="128" width="100" />
+			</row>
+			<row>
+				<label value="Horisontaly:" />
+				<label value="Verticaly:" />
+				<label id="x" value="     " />
+				<label value="Horisontaly:" />
+				<label value="Verticaly:" />
+			</row>
+			<row>
+				<radiogroup id="alignHorizontal1" selected="bottom">
+					<radio id="alignHorizontal1_top" label="top"/>
+					<radio id="alignHorizontal1_middle" label="middle"/>
+					<radio id="alignHorizontal1_bottom" label="bottom"/>
+				</radiogroup>
+				
+				<radiogroup id="alignVertical1">
+					<radio id="alignVertical1_left" label="left"/>
+					<radio id="alignVertical1_center" label="center"/>
+					<radio id="alignVertical1_right" label="right"/>			
+				</radiogroup>
+				
+				<label id="x" value="     " />
+				
+				<radiogroup id="alignHorizontal2">
+					<radio id="alignHorizontal2_top" label="top"/>
+					<radio id="alignHorizontal2_middle" label="middle"/>
+					<radio id="alignHorizontal2_bottom" label="bottom"/>
+				</radiogroup>
+				
+				<radiogroup id="alignVertical2">
+					<radio id="alignVertical2_left" label="left"/>
+					<radio id="alignVertical2_center" label="center"/>
+					<radio id="alignVertical2_right" label="right"/>			
+				</radiogroup>
+			 </row>
+			 
+		</rows>
+	</grid>
+	
+</dialog>

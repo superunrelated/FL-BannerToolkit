@@ -1,0 +1,64 @@
+﻿Utils = function() {}
+
+Utils.prototype.setSmoothing = function(library, smoothing) {
+	for (var i = 0; i < library.items.length; i++){
+		var libItem = document.library.items[i];
+		if (libItem.itemType == "bitmap"){
+			libItem.allowSmoothing = smoothing;
+		}
+	}
+}
+
+Utils.prototype.savePreferences = function (prefs){
+    var str = "";
+    for (var n in prefs){
+        str += n + ":'" + prefs[n] + "',";
+    }
+    FLfile.write(PREFERENCES_URI, str);
+}
+
+
+Utils.prototype.loadPreferences = function(){
+    var prefs = {};
+    var prefsStr = FLfile.read(PREFERENCES_URI);
+
+var json_data_object = eval("(" + json_string + ")");
+
+    
+    trace(prefsStr)
+    if (prefsStr) {
+        var prefsArr = prefsStr.split(",");
+        for (var i = 0; i < prefsArr.length; i++) {
+            var itemArr = prefsArr[i].split(":");
+            if (itemArr[0] && itemArr[1]){
+               prefs[itemArr[0]] = itemArr[1];
+            }
+        }
+    }
+    return prefs;
+}
+
+
+Utils.prototype.trace = function() {
+	var str = "";
+	for (i=0; i<arguments.length; i++){
+		str += (i!=0 ? " " : "") + arguments[i];
+	}
+	fl.trace(str);
+}
+
+Utils.prototype.log = function() {
+	if (!Utils.prototype.logStr){
+		Utils.prototype.logStr = "\n>> EVENT LOG:\n";
+	}
+	var str = "";
+	for (i=0; i<arguments.length; i++){
+		str += (i!=0 ? " " : "") + arguments[i];
+	}
+	fl.trace(str);
+	Utils.prototype.logStr += str + "\n";
+}
+
+Utils.prototype.traceLog = function() {
+	Utils.prototype.trace(Utils.prototype.logStr);
+}

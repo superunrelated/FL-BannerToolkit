@@ -1,0 +1,37 @@
+﻿var result = fl.getDocumentDOM().xmlPanel(fl.configURI + "Commands/banners/Resize Instance.xml");
+if (result.dismiss == "accept"){
+	resizeElement(result["instanceName"]);
+}
+
+function resizeElement(instanceName) {
+	var count = 0;
+	
+	for(i=fl.documents.length-1; i>-1; i--){
+		var document = fl.documents[i];
+		var timeline = document.getTimeline();
+		timeline.currentFrame = 0;
+		
+		for (layerIndex in timeline.layers){
+			var layer = timeline.layers[layerIndex];
+			for (frameIndex in layer.frames){
+				var frame = layer.frames[frameIndex];
+				if (frameIndex == frame.startFrame){
+					
+					for (elementIndex in frame.elements){
+						var element = frame.elements[elementIndex];
+						 
+						if (element.name == instanceName){
+							element.x = document.width;
+							element.y = document.height;
+							count++;
+							fl.trace("Element:" + element.name  + " on document:'" + document.name + "', layer:'" + layer.name + "', frame:" + frameIndex + " resized to:" + document.width + "x" + document.height);
+						}
+					}
+				
+				}
+			}
+		}
+	}
+
+	fl.trace("Elements named:" + instanceName + " resized:" + count);
+}

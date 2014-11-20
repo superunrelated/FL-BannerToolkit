@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<dialog title="Resize Instances to stage" buttons="accept,cancel">
+	<grid>
+		<label id="title" value="Set Publish Settings:" />
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<hbox>
+					<label id="title" value="Quality:" />
+				</hbox>
+				<hbox>
+					<textbox id="quality" value="80" multiline="false" maxlength="3" />
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</dialog>

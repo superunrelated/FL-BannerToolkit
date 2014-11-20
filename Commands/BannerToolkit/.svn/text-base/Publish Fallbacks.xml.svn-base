@@ -1,0 +1,64 @@
+﻿<dialog title="Set publish settings" buttons="accept, cancel" >
+	<grid>
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<hbox>
+					<label value="Fallback frame/framelabel:" />
+				</hbox>
+				<hbox>
+					<textbox id="fallbackFrame" value="fallback" multiline="false"/>
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="flashQualityCheckbox" label="Change Flash Quality" checked="true" />
+				</hbox>
+				<hbox>
+					<textbox id="flashQuality" value="80" multiline="false" maxlength="3" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="jpgQualityCheckbox" label="Change JPG Quality" checked="true" />
+				</hbox>
+				<hbox>
+					<textbox id="jpgQuality" value="80" multiline="false" maxlength="3" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<label value="Fallbacks:" />
+				</hbox>
+				<hbox>
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="jpgCheckbox" label="JPEG" checked="true" />
+				</hbox>
+				<hbox>
+					<checkbox id="gifCheckbox" label="GIF" checked="false" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<label value="Settings:" />
+				</hbox>
+				<hbox>
+				</hbox>
+				</row>
+			<row>
+				<hbox>
+					<checkbox id="sizeReportCheckbox" label="Publish Size Report" checked="false" />
+				</hbox>
+				<hbox>
+					<checkbox id="smoothingCheckbox" label="Allow Smoothing" checked="true" />
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</dialog>

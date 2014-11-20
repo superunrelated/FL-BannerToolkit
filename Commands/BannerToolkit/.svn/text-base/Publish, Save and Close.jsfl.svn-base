@@ -1,0 +1,9 @@
+﻿for(i=fl.documents.length-1; i>-1; i--){
+	var document = fl.documents[i];
+	document.publish();
+	
+	var saved =document.saveAndCompact();
+	if (saved){
+		document.close();
+	}
+}

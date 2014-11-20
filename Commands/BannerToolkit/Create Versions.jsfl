@@ -1,6 +1,6 @@
 ﻿fl.outputPanel.clear();
 // INCLUDE:
-var UTIL_PATH = fl.configURI + "Commands/utils/";
+var UTIL_PATH = fl.configURI + "Commands/BannerToolkit/utils/";
 eval(FLfile.read(UTIL_PATH + "Include.jsfl"));
 include(UTIL_PATH + "Log.jsfl");
 include(UTIL_PATH + "Json2.jsfl");
@@ -12,13 +12,14 @@ var panel = new Panel();
 
 // CLASS:
 
-var FORMATS_PANEL = fl.configURI + "Commands/banners/Create Versions formats.xml";
-var SETTINGS_PANEL = fl.configURI + "Commands/banners/Create Versions settings.xml";
+var FORMATS_PANEL = fl.configURI + "Commands/BannerToolkit/Create Versions formats.xml";
+var SETTINGS_PANEL = fl.configURI + "Commands/BannerToolkit/Create Versions settings.xml";
 
 var versions = new Array();
 var resize = new Array();
 var align = new Array();
 var smoothing = false;
+var deleteUnused = false;
 
 init();
 
@@ -78,6 +79,7 @@ function showSettingsPanel(){
 
 function parseSettingsPanel(result){
     smoothing = result.smoothingCheckbox == "true";
+    deleteUnused = result.deleteUnused == "true";
     for (var name in result) {
         if (result[name] == "true") {
             if (name.indexOf("resize") != -1) {
@@ -96,21 +98,33 @@ function parseSettingsPanel(result){
             }
        	}
     }
+    setupDocumentForVersioning();
+    createDocuments();
+}
 
-   createDocuments();
+function setupDocumentForVersioning(){
+    var doc = fl.getDocumentDOM();
+    doc.editScene(0);
+    utils.setSmoothing(doc.library, smoothing);
+    if (deleteUnused){
+        deleteUnusedLibraryItems(doc);
+    }
+    fl.saveDocument(doc);
+}
+
+function deleteUnusedLibraryItems(doc){
+    var items = doc.library.unusedItems;
+    log("Number of unused items found: " + items.length);
+    for (var i in items) {
+        log("Deleting: ", items[i].name);
+        doc.library.deleteItem(items[i].name);
+    }
 }
 
 function createDocuments() {
     var source = fl.getDocumentDOM();
-    source.editScene(0);
-    fl.saveDocument(source);
-	
-	utils.setSmoothing(source.library, smoothing);
-	
-	var sourceFonts = getFonts(source);
-    var sourceTimeline = source.getTimeline();
-    sourceTimeline.selectAllFrames()
-    sourceTimeline.copyFrames();
+    var sourceW = source.width;
+    var sourceH = source.height;
 
     var fileURI = source.pathURI;
     var fileName = fileURI.split("/").pop();
@@ -120,31 +134,31 @@ function createDocuments() {
     utils.createSettingsYML(folderPath + "deploy/");
 
     for (var j = 0; j < versions.length; j++) {
-        var version = fl.createDocument("timeline");
 		var versionName = versions[j].w + "x" + versions[j].h + baseName;
         var versionURI = folderPath + versionName + ".fla";
-		var publishSettings = renamePublishSettings(source.exportPublishProfileString(), versionName);
-		
-		version.importPublishProfileString(publishSettings);
-		version.docClass = source.docClass;
-		version.frameRate = source.frameRate;
-		version.backgroundColor = source.backgroundColor;
-		
-		fl.setActiveWindow(version);
-		
-        version.width = versions[j].w;
-        version.height = versions[j].h;
-        version.getTimeline().setSelectedFrames(0, 1);
-        version.getTimeline().pasteFrames();
 
-        // this is a little buggy - check later:
-		embedFonts(version, sourceFonts);
+        if (fl.fileExists(versionURI)) {
+            alert("Cannot create file: " + versionName + " because it exists");
+            continue;
+        }
 
-        resizeElements(version, resize);
-        alignElements(version, align);
-  
-        fl.saveDocument(version, versionURI);
+        var publishSettings = renamePublishSettings(source.exportPublishProfileString(), versionName);
+        source.importPublishProfileString(publishSettings);
+        source.width = versions[j].w;
+        source.height = versions[j].h;
+
+        resizeElements(source, resize);
+        alignElements(source, align);
+
+        source.saveAsCopy(versionURI);
     }
+
+
+    // reset:
+    source.width = sourceW;
+    source.height = sourceH;
+    resizeElements(source, resize);
+    alignElements(source, align);
 }
 
 function renamePublishSettings(publishSettings, versionName){
@@ -190,7 +204,7 @@ function embedFonts(document, fonts) {
 	}
 }
 
-function alignElements(document, align) {
+function alignElements(document, instances) {
     var timeline = document.getTimeline();
     timeline.currentFrame = 0;
     for (layerIndex in timeline.layers) {
@@ -200,8 +214,8 @@ function alignElements(document, align) {
             if (frameIndex == frame.startFrame) {
                 for (elementIndex in frame.elements) {
                     var element = frame.elements[elementIndex];
-                    for (var i = 0; i < align.length; i++) {
-                        var obj = align[i];
+                    for (var i = 0; i < instances.length; i++) {
+                        var obj = instances[i];
                         if (obj.instance == element.name) {
                             switch (obj.h) {
                             case "top":

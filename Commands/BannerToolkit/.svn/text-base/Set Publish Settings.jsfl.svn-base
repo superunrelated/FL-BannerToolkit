@@ -1,0 +1,40 @@
+﻿var result = fl.getDocumentDOM().xmlPanel(fl.configURI + "Commands/banners/Set Publish Settings.xml");
+if (result.dismiss == "accept"){
+
+	var quality = result.quality;
+/*
+	var arr = new Array();
+	for  (var name in result){
+		if (name.indexOf("quality") != -1 && result[name] == "true"){
+			arr.push(result[name.replace("Checkbox", "Value")]);
+		}
+	}
+*/
+	fl.outputPanel.clear();
+
+		setPublishSettings(quality);
+	
+}
+
+
+function setPublishSettings(quality) {
+		var doc = fl.documents[i];
+		fl.setActiveWindow(doc);
+		var dom =fl.getDocumentDOM();
+		var plainName = doc.name.replace(".fla", "");
+		var xml = doc.exportPublishProfileString();
+			
+		xml = xml.replace("<ExternalPlayer>FlashPlayer10</ExternalPlayer>", "<ExternalPlayer></ExternalPlayer>");
+		xml = xml.replace("<ActionScriptVersion>3</ActionScriptVersion>", "<ActionScriptVersion>2</ActionScriptVersion>");
+		xml = xml.replace("<Version>10</Version>", "<Version>9</Version>");
+		xml = xml.replace("<DebuggingPermitted>0</DebuggingPermitted>", "<DebuggingPermitted>0</DebuggingPermitted>");
+		xml = xml.replace("<IncludeXMP>1</IncludeXMP>", "<IncludeXMP>0</IncludeXMP>");
+		xml = xml.replace("<PackagePaths></PackagePaths>", "<PackagePaths>src;</PackagePaths>");
+		xml = xml.replace(/\<Quality\>\d*\<\/Quality\>/g, "<Quality>" + quality + "</Quality>");
+			
+		doc.importPublishProfileString(xml);
+		fl.saveDocument(doc);
+		
+		//fl.trace(xml)
+	}
+}

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0"?>
+<dialog title="Resize Instances to stage" buttons="accept,cancel">
+	<grid>
+		<label id="title" value="Choose instances name to resize to stage:" />
+		<columns>
+			<column/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				<hbox>
+					<checkbox id="i1Checkbox" label="instance:" checked="true" />
+				</hbox>
+				<hbox>
+					<textbox id="i1Value" value="button" multiline="false" maxlength="64" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="i2Checkbox" label="instance:" checked="false" />
+				</hbox>
+				<hbox>
+					<textbox id="i2Value" value="background" multiline="false" maxlength="64" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="i3Checkbox" label="instance:" checked="false" />
+				</hbox>
+				<hbox>
+					<textbox id="i3Value" value="" multiline="false" maxlength="64" />
+				</hbox>
+			</row>
+			<row>
+				<hbox>
+					<checkbox id="i4Checkbox" label="instance:" checked="false" />
+				</hbox>
+				<hbox>
+					<textbox id="i4Value" value="" multiline="false" maxlength="64" />
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</dialog>

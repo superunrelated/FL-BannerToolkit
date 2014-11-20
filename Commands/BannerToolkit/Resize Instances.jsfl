@@ -1,0 +1,40 @@
+﻿var result = fl.getDocumentDOM().xmlPanel(fl.configURI + "Commands/BannerToolkit/Resize Instances.xml");
+if (result.dismiss == "accept"){
+	var arr = new Array();
+	for  (var name in result){
+		if (name.indexOf("Checkbox") != -1 && result[name] == "true"){
+			arr.push(result[name.replace("Checkbox", "Value")]);
+		}
+	}
+
+	fl.outputPanel.clear();
+	
+	for(i=fl.documents.length-1; i>-1; i--){
+		resizeElements(fl.documents[i], arr);
+	}
+}
+
+function resizeElements(document, instances) {
+	var timeline = document.getTimeline();
+	timeline.currentFrame = 0;
+	for (layerIndex in timeline.layers){
+		var layer = timeline.layers[layerIndex];
+		for (frameIndex in layer.frames){
+			var frame = layer.frames[frameIndex];
+			if (frameIndex == frame.startFrame){
+				for (elementIndex in frame.elements){
+					var element = frame.elements[elementIndex];
+					if (instances.indexOf(element.name) != -1){
+						element.width = document.width;
+						element.height = document.height;
+						element.matrix.tx = 0;
+						element.matrix.ty = 0;
+						element.x = 0;
+						element.y = 0;
+						fl.trace("Instance:" + element.name  + " on document:'" + document.name + "', layer:'" + layer.name + "', frame:" + frameIndex + " resized to:" + document.width + "x" + document.height);
+					}
+				}
+			}
+		}
+	}
+}

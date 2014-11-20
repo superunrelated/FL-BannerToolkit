@@ -1,0 +1,216 @@
+﻿fl.outputPanel.clear();
+
+var result = fl.getDocumentDOM().xmlPanel(fl.configURI + "Commands/banners/Create Versions.xml");
+interpretResult(result);
+
+function interpretResult(result) {
+    if (result.dismiss == "accept") {
+        var versions = new Array();
+        var resize = new Array();
+        var align = new Array();
+		var smoothing = result.smoothingCheckbox == "true";
+		
+        for (var name in result) {
+            if (result[name] == "true") {
+                if (name.indexOf("banner") != -1) {
+                    var v = name.replace("banner_", "").split("x");
+                    versions.push({
+                        w: parseInt(v[0]),
+                        h: parseInt(v[1]) 
+                    });
+				
+                } else if (name.indexOf("resize") != -1) {
+                    resize.push(result[name.replace("Checkbox", "Instance")]);
+
+                } else if (name.indexOf("align") != -1) {
+                    var obj = {
+                        instance: result[name.replace("Checkbox", "Instance")],
+                        h: result[name.replace("Checkbox", "Horizontal")],
+                        v: result[name.replace("Checkbox", "Vertical")]
+                    }
+                    fl.trace(obj.instance + " - " + obj.h + " - " + obj.v)
+                    align.push(obj);
+                }
+
+           	} else if (name.indexOf("customX") != -1) {
+				var valueX = parseInt(result[name]);
+				var valueY = parseInt(result[name.replace("X", "Y")]);
+				if (valueX > 0 && valueY > 0){
+					versions.push({
+						w: valueX,
+						h: valueY
+                	});
+				}
+			}
+			
+        }
+
+        createDocuments(versions, resize, align, smoothing);
+    }
+}
+
+function createDocuments(versions, resize, align, smoothing) {
+    var source = fl.getDocumentDOM();
+    fl.saveDocument(source);
+	
+	setSmoothing(source.library, smoothing);
+	
+	var sourceFonts = getFonts(source);
+    var sourceTimeline = source.getTimeline();
+    sourceTimeline.selectAllFrames()
+    sourceTimeline.copyFrames();
+
+    var fileURI = source.pathURI;
+    var fileName = fileURI.split("/").pop();
+    var folderPath = fileURI.split(fileName)[0];
+    var baseName = fileName.replace(".fla", "").replace(/[0-9]*x[0-9]*/, "");
+	
+    for (var j = 0; j < versions.length; j++) {
+        var version = fl.createDocument("timeline");
+		var versionName = versions[j].w + "x" + versions[j].h + baseName;
+        var versionURI = folderPath + versionName + ".fla";
+		var publishSettings = renamePublishSettings(source.exportPublishProfileString(), versionName);
+		
+		version.importPublishProfileString(publishSettings);
+		version.docClass = source.docClass;
+		version.frameRate = source.frameRate;
+		version.backgroundColor = source.backgroundColor;
+		
+		fl.setActiveWindow(version);
+		
+        version.width = versions[j].w;
+        version.height = versions[j].h;
+        version.getTimeline().setSelectedFrames(0, 1);
+        version.getTimeline().pasteFrames();
+
+		embedFonts(version, sourceFonts);
+        resizeElements(version, resize);
+        alignElements(version, align);
+
+        fl.saveDocument(version, versionURI);
+    }
+}
+
+function renamePublishSettings(publishSettings, versionName){
+	publishSettings = publishSettings.replace(/<flashFileName>[^<]*<\/flashFileName>/, "<flashFileName>deploy/" + versionName + ".swf<\/flashFileName>");
+	publishSettings = publishSettings.replace(/<jpegFileName>[^<]*<\/jpegFileName>/, "<jpegFileName>deploy/" + versionName +"_fallback.jpg<\/jpegFileName>");
+	publishSettings = publishSettings.replace(/<gifFileName>[^<]*<\/gifFileName>/, "<gifFileName>deploy/" + versionName +"_fallback.gif<\/gifFileName>");
+	return publishSettings;
+}
+
+function setSmoothing(library, smoothing) {
+	for (var i = 0; i < library.items.length; i++){
+		var libItem = document.library.items[i];
+		if (libItem.itemType == "bitmap"){
+			libItem.allowSmoothing = smoothing;
+		}
+	}
+}
+
+function getFonts(document) {
+	var data = {}
+	for (var i = 0; i < document.library.items.length; i++){
+		var libItem = document.library.items[i];
+		if (libItem.itemType == "font"){
+			var font = {}
+			for (var propName in libItem){
+				var prop = libItem[propName];
+				if (prop){
+					font[propName] = libItem[propName]
+				}
+			}
+			data[libItem.name] = font;
+		}
+	}
+	return data;
+}
+
+function embedFonts(document, fonts) {
+	for (fontName in fonts){
+		var font = fonts[fontName];
+		document.library.addNewItem('font', fontName);
+		var index = document.library.findItemIndex(fontName);
+		if (index > -1) {
+			var newFont = document.library.items[index];
+			for (name in font){
+				newFont[name] = font[name];
+			}
+		}
+	}
+}
+
+function alignElements(document, align) {
+    var timeline = document.getTimeline();
+    timeline.currentFrame = 0;
+    for (layerIndex in timeline.layers) {
+        var layer = timeline.layers[layerIndex];
+        for (frameIndex in layer.frames) {
+            var frame = layer.frames[frameIndex];
+            if (frameIndex == frame.startFrame) {
+                for (elementIndex in frame.elements) {
+                    var element = frame.elements[elementIndex];
+                    for (var i = 0; i < align.length; i++) {
+                        var obj = align[i];
+                        if (obj.instance == element.name) {
+                            switch (obj.h) {
+                            case "top":
+                                element.y = 0;
+                                break;
+                            case "middle":
+                                element.y = document.height * .5;
+                                break;
+                            case "bottom":
+                                element.y = document.height;
+                                break;
+                            }
+
+                            switch (obj.v) {
+                            case "left":
+                                element.x = 0;
+                                break;
+                            case "center":
+                                element.x = document.width * .5;
+                                break;
+                            case "right":
+                                element.x = document.width;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function resizeElements(document, instances) {
+    var timeline = document.getTimeline();
+    timeline.currentFrame = 0;
+    for (layerIndex in timeline.layers) {
+        var layer = timeline.layers[layerIndex];
+        for (frameIndex in layer.frames) {
+            var frame = layer.frames[frameIndex];
+            if (frameIndex == frame.startFrame) {
+                for (elementIndex in frame.elements) {
+                    var element = frame.elements[elementIndex];
+                    if (instances.indexOf(element.name) != -1) {
+                        element.width = document.width;
+                        element.height = document.height;
+                        element.matrix.tx = 0;
+                        element.matrix.ty = 0;
+                        element.x = 0;
+                        element.y = 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+function trace() {
+	var str = "";
+	for (i=0; i<arguments.length; i++){
+		str += arguments[i] + ", ";
+	}
+	fl.trace(str);
+}
